@@ -4,8 +4,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import eu.clarin.weblicht.bindings.cmd.cp.ComplextypeMetadataScheme;
-import eu.clarin.weblicht.bindings.cmd.cp.ComplextypeWebServiceType;
+import eu.clarin.weblicht.bindings.cmd.cp.MetadataScheme;
+import eu.clarin.weblicht.bindings.cmd.cp.WebServiceType;
 import eu.clarin.weblicht.bindings.cmd.cp.Metadata;
 import eu.clarin.weblicht.bindings.cmd.cp.SimpleMetadataScheme;
 import eu.clarin.weblicht.bindings.cmd.cp.SimpleWebServiceType;
@@ -68,7 +68,7 @@ public class OAIConnector extends AbstractConnector {
     }
 
     public static boolean hasCMDI(Metadata metadata) {
-        for (ComplextypeMetadataScheme scheme : metadata.getMetadataScheme()) {
+        for (MetadataScheme scheme : metadata.getMetadataScheme()) {
             if (scheme.getValue() == SimpleMetadataScheme.CMDI) {
                 return true;
             }
@@ -77,7 +77,7 @@ public class OAIConnector extends AbstractConnector {
     }
 
     public static boolean hasWebLichtWebServices(Metadata metadata) {
-        for (ComplextypeWebServiceType type : metadata.getWebServiceType()) {
+        for (WebServiceType type : metadata.getWebServiceType()) {
             if (type.getValue() == SimpleWebServiceType.WEB_LICHT) {
                 return true;
             }
