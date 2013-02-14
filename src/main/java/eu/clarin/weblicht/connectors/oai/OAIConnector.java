@@ -4,15 +4,17 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import eu.clarin.weblicht.bindings.cmd.cp.MetadataScheme;
 import eu.clarin.weblicht.bindings.cmd.cp.WebServiceType;
 import eu.clarin.weblicht.bindings.cmd.cp.Metadata;
+import eu.clarin.weblicht.bindings.cmd.cp.MetadataScheme;
 import eu.clarin.weblicht.bindings.cmd.cp.SimpleMetadataScheme;
 import eu.clarin.weblicht.bindings.cmd.cp.SimpleWebServiceType;
-import eu.clarin.weblicht.bindings.oai.OAIPMHBinding;
+import eu.clarin.weblicht.bindings.oai.OAIPMH;
+import eu.clarin.weblicht.bindings.oai.Record;
 import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
 import java.net.URI;
+import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
@@ -36,14 +38,24 @@ public class OAIConnector extends AbstractConnector {
         super(client);
     }
 
-    public OAIPMHBinding retrieveServices(Metadata metadata) throws ConnectorException {
-        WebResource oaiResource = buildWebResource(metadata);
-        return retrieveServices(oaiResource);
+    public List<Record> retrieveRecords(URI uri) throws ConnectorException {
+        WebResource oaiResource = buildWebResource(uri, null);
+        return retrieveOAIPMH(oaiResource).getRecords();
     }
 
-    public OAIPMHBinding retrieveServices(WebResource oaiResource) throws ConnectorException {
+    public List<Record> retrieveRecords(URI uri, String webServiceSet) throws ConnectorException {
+        WebResource oaiResource = buildWebResource(uri, webServiceSet);
+        return retrieveOAIPMH(oaiResource).getRecords();
+    }
+
+    public OAIPMH retrieveOAIPMH(Metadata metadata) throws ConnectorException {
+        WebResource oaiResource = buildWebResource(metadata);
+        return retrieveOAIPMH(oaiResource);
+    }
+
+    public OAIPMH retrieveOAIPMH(WebResource oaiResource) throws ConnectorException {
         try {
-            return oaiResource.accept(MediaType.APPLICATION_XML).get(OAIPMHBinding.class);
+            return oaiResource.accept(MediaType.APPLICATION_XML).get(OAIPMH.class);
         } catch (UniformInterfaceException ex) {
             throw new ConnectorException("unable to retrieve services", ex);
         } catch (ClientHandlerException ex) {
@@ -55,16 +67,20 @@ public class OAIConnector extends AbstractConnector {
         URI uri = metadata.getOaiAccessPoint();
         String webServiceSet = metadata.getWebServicesSet();
         if (uri != null && uri.getQuery() != null) {
-            UriBuilder uriBuilder = UriBuilder.fromUri(uri);
-            uriBuilder = uriBuilder.replaceQuery(null);
-            WebResource oaiResource = client.resource(uriBuilder.build()).queryParam(VERB, LIST_RECORDS).queryParam(METADATA_PREFIX, CMDI);
-            if (webServiceSet != null && !webServiceSet.isEmpty()) {
-                oaiResource = oaiResource.queryParam(SET, webServiceSet);
-            }
-            return oaiResource;
+            return buildWebResource(uri, webServiceSet);
 
         }
         return null;
+    }
+
+    public WebResource buildWebResource(URI uri, String webServiceSet) {
+        UriBuilder uriBuilder = UriBuilder.fromUri(uri);
+        uriBuilder = uriBuilder.replaceQuery(null);
+        WebResource oaiResource = client.resource(uriBuilder.build()).queryParam(VERB, LIST_RECORDS).queryParam(METADATA_PREFIX, CMDI);
+        if (webServiceSet != null && !webServiceSet.isEmpty()) {
+            oaiResource = oaiResource.queryParam(SET, webServiceSet);
+        }
+        return oaiResource;
     }
 
     public static boolean hasCMDI(Metadata metadata) {
