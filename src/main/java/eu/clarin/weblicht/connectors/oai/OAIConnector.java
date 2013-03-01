@@ -93,12 +93,8 @@ public class OAIConnector extends AbstractConnector {
 
     public WebResource buildWebResource(Metadata metadata) throws ConnectorException {
         URI uri = metadata.getOaiAccessPoint();
-        String webServiceSet = metadata.getWebServicesSet();
-        if (webServiceSet == null || webServiceSet.isEmpty()) {
-            throw new ConnectorException("WebServicesSet is undefined");
-        }
         if (uri != null && uri.getQuery() != null) {
-            return buildWebResource(uri, webServiceSet);
+            return buildWebResource(uri, metadata.getWebServicesSet());
         }
         throw new ConnectorException("bad oai access point uri: " + uri);
     }
