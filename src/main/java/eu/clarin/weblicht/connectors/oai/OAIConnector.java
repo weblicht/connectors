@@ -68,6 +68,7 @@ public class OAIConnector extends AbstractConnector {
             if (resumptionToken != null) {
                 if (records == null) {
                     records = new ArrayList<Record>();
+                    oaiResource = client.resource(oaiResource.getUriBuilder().replaceQuery(null).build()).queryParam(VERB, LIST_RECORDS);
                 }
                 records.addAll(oaipmh.getListRecords().getRecords());
                 if (resumptionToken.getValue() != null && !resumptionToken.getValue().isEmpty()) {
