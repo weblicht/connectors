@@ -14,10 +14,12 @@ import eu.clarin.weblicht.bindings.oai.Record;
 import eu.clarin.weblicht.bindings.oai.ResumptionToken;
 import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -85,6 +87,16 @@ public class OAIConnector extends AbstractConnector {
     public OAIPMH retrieveOAIPMH(WebResource oaiResource) throws ConnectorException {
         try {
             return oaiResource.accept(MediaType.APPLICATION_XML).get(OAIPMH.class);
+        } catch (UniformInterfaceException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        } catch (ClientHandlerException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        }
+    }
+
+    public InputStream retrieveInputStream(WebResource oaiResource) throws ConnectorException {
+        try {
+            return oaiResource.accept(MediaType.APPLICATION_XML).get(InputStream.class);
         } catch (UniformInterfaceException ex) {
             throw new ConnectorException("unable to retrieve services", ex);
         } catch (ClientHandlerException ex) {
