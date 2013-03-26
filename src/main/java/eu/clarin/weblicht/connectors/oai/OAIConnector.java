@@ -14,13 +14,16 @@ import eu.clarin.weblicht.bindings.oai.Record;
 import eu.clarin.weblicht.bindings.oai.ResumptionToken;
 import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -81,6 +84,20 @@ public class OAIConnector extends AbstractConnector {
             } else {
                 return oaipmh.getListRecords().getRecords();
             }
+        }
+    }
+
+    public static List<Record> readRecords(InputStream inputStream) throws ConnectorException {
+        try {
+            JAXBContext context = JAXBContext.newInstance(OAIPMH.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            OAIPMH oaipmh = ((OAIPMH) unmarshaller.unmarshal(inputStream));
+            inputStream.close();
+            return oaipmh.getListRecords().getRecords();
+        } catch (IOException ex) {
+            throw new ConnectorException(ex);
+        } catch (JAXBException ex) {
+            throw new ConnectorException(ex);
         }
     }
 
