@@ -29,13 +29,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <scm>
         <url>https://dspin.sfs.uni-tuebingen.de/gitblit/summary/clarind!libraries!connectors.git</url>
         <connection>https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</connection>
-        <developerConnection>https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</developerConnection>
+        <developerConnection>https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git
+        </developerConnection>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>ssh-repository</id>
+            <url>scpexe://dspin/var/local/maven</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <repositories>
         <repository>
             <id>clarin</id>
@@ -61,33 +69,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <scope>test</scope>
         </dependency>
     </dependencies>
-  
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.4</version>
-                <configuration>
-                    <argLine>-Xmx1G</argLine>
-                </configuration>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>2.4</version>
+            </extension>
+        </extensions>
     </build>
 
     <licenses>
