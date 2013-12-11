@@ -28,9 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <scm>
         <url>https://dspin.sfs.uni-tuebingen.de/gitblit/summary/clarind!libraries!connectors.git</url>
-        <connection>https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</connection>
-        <developerConnection>https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git
-        </developerConnection>
+        <connection>scm:git:https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</connection>
+        <developerConnection>scm:git:https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</developerConnection>
     </scm>
 
     <distributionManagement>
