@@ -123,7 +123,7 @@ public class OAIConnector extends AbstractConnector {
 
     public WebResource buildWebResource(Metadata metadata) throws ConnectorException {
         URI uri = metadata.getOaiAccessPoint();
-        if (uri != null && uri.getQuery() != null) {
+        if (uri != null) {
             return buildWebResource(uri, metadata.getWebServicesSet());
         }
         throw new ConnectorException("bad oai access point uri: " + uri);
