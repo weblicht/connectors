@@ -1,9 +1,5 @@
 package eu.clarin.weblicht.connectors.cr;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 import eu.clarin.weblicht.bindings.cmd.cp.CenterProfile;
 import eu.clarin.weblicht.bindings.cmd.cp.CenterProfileCMD;
 import eu.clarin.weblicht.bindings.cr.Center;
@@ -12,6 +8,8 @@ import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
 import java.net.URI;
 import java.util.List;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -32,29 +30,17 @@ public class CenterRegistryConnector extends AbstractConnector {
         this.centerRegistryUri = centerRegistryUri;
     }
 
-    public List<Center> retrieveCenters() throws ConnectorException {
-        WebResource webResource = client.resource(centerRegistryUri);
+    public List<Center> retrieveCenters() {
+        WebTarget webResource = client.target(centerRegistryUri);
         Centers centers;
-        try {
-            centers = webResource.accept(MediaType.APPLICATION_XML).get(Centers.class);
-        } catch (UniformInterfaceException ex) {
-            throw new ConnectorException(ex);
-        } catch (ClientHandlerException ex) {
-            throw new ConnectorException(ex);
-        }
+        centers = webResource.request(MediaType.APPLICATION_XML).get(Centers.class);
         return centers.getCenterProfiles();
     }
 
-    public CenterProfile retrieveCenterProfile(Center center) throws ConnectorException {
-        WebResource webResource = client.resource(center.getLink());
+    public CenterProfile retrieveCenterProfile(Center center) {
+        WebTarget webTarget = client.target(center.getLink());
         CenterProfileCMD cmd;
-        try {
-            cmd = webResource.accept(MediaType.APPLICATION_XML).get(CenterProfileCMD.class);
-        } catch (UniformInterfaceException ex) {
-            throw new ConnectorException(ex);
-        } catch (ClientHandlerException ex) {
-            throw new ConnectorException(ex);
-        }
+        cmd = webTarget.request(MediaType.APPLICATION_XML).get(CenterProfileCMD.class);
         return cmd.getComponents().getCenterProfile();
     }
 }

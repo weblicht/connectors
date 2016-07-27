@@ -1,8 +1,10 @@
 package eu.clarin.weblicht.connectors;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import java.io.Closeable;
 
 /**
@@ -14,9 +16,8 @@ public class AbstractConnector implements Closeable {
     protected final Client client;
 
     protected AbstractConnector(Integer timeoutMilliseconds) {
-        ClientConfig config = new DefaultClientConfig();
-        client = Client.create(config);
-        client.setConnectTimeout(timeoutMilliseconds);
+        client = ClientBuilder.newClient();
+        client.property(ClientProperties.CONNECT_TIMEOUT, timeoutMilliseconds);
     }
 
     protected AbstractConnector(Client client) {
@@ -24,6 +25,6 @@ public class AbstractConnector implements Closeable {
     }
 
     public void close() {
-        client.destroy();
+        client.close();
     }
 }
