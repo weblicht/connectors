@@ -33,10 +33,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
     </scm>
 
     <distributionManagement>
-        <repository>
-            <id>ssh-repository</id>
-            <url>scpexe://dspin/var/local/maven</url>
+       <repository>
+            <id>sfs-clarind-nexus</id>
+            <name>Internal Releases</name>
+            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>sfs-clarind-nexus-snapshot</id>
+            <name>Snapshot Releases</name>
+            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <properties>
@@ -44,6 +50,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
     </properties>
 
     <repositories>
+      <repository>
+            <id>sfs-clarind-nexus</id>
+            <name>Internal Releases</name>
+            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <id>sfs-clarind-nexus-snapshots</id>
+            <name>Internal Snapshots</name>
+            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/snapshots</url>
+        </repository>
         <repository>
             <id>clarin</id>
             <url>http://catalog.clarin.eu/ds/nexus/content/repositories/Clarin/</url>
