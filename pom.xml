@@ -26,11 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
     <url>http://www.clarin.eu/</url>
 
     <scm>
-        <url>https://dspin.sfs.uni-tuebingen.de/gitblit/summary/clarind!libraries!connectors.git</url>
-        <connection>scm:git:https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</connection>
-        <developerConnection>scm:git:https://dspin.sfs.uni-tuebingen.de/gitblit/git/clarind/libraries/connectors.git</developerConnection>
+        <url>https://arc.sfs.uni-tuebingen.de/summary/clarind!libraries!connectors.git</url>
+        <connection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</connection>
+        <developerConnection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <distributionManagement>
         <repository>
