@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
 
     <groupId>eu.clarin.weblicht</groupId>
     <artifactId>connectors</artifactId>
-    <version>1.1.6-SNAPSHOT</version>
+    <version>1.1.6</version>
     <packaging>jar</packaging>
 
     <name>connectors</name>
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
         <url>https://arc.sfs.uni-tuebingen.de/summary/clarind!libraries!connectors.git</url>
         <connection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</connection>
         <developerConnection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>connectors-1.1.6</tag>
     </scm>
 
     <distributionManagement>
