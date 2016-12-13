@@ -15,7 +15,8 @@ import static org.junit.Assert.*;
 public class OAIConnectorTest {
 
     private static final int TIMEOUT = 3000;
-    private static final URI REPOSITORY_URI = URI.create("http://localhost:8084/harvester/resources/services");
+    private static final URI REPOSITORY_URI = URI.create("http://weblicht.sfs.uni-tuebingen.de/oaiprovider/");
+    private static final URI REPOSITORY_URI_BERLIN = URI.create("http://clarin.bbaw.de:8088/oaiprovider");
     private OAIConnector connector;
 
     public OAIConnectorTest() {
@@ -33,20 +34,16 @@ public class OAIConnectorTest {
     /**
      * Test of retrieveRecords method, of class OAIConnector.
      */
-    //@Test
+    @Test
     public void testRetrieveRecords_URI() throws Exception {
         System.out.println("retrieveRecords");
         List<Record> result = connector.retrieveRecords(REPOSITORY_URI);
-        assertEquals(76, result.size());
     }
 
-    /**
-     * Test of retrieveRecords method, of class OAIConnector.
-     */
-    //@Test
-    public void testRetrieveRecords_URI_String() throws Exception {
+    @Test
+    public void testRetrieveRecords_URI_Berlin() throws Exception {
         System.out.println("retrieveRecords");
-        List<Record> result = connector.retrieveRecords(REPOSITORY_URI, "WebLichtServiceSet");
-        assertEquals(76, result.size());
+        List<Record> result = connector.retrieveRecords(REPOSITORY_URI_BERLIN);
     }
+
 }

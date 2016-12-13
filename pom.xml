@@ -53,12 +53,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
       <repository>
             <id>sfs-clarind-nexus</id>
             <name>Internal Releases</name>
-            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/releases</url>
+            <url>http://t.weblicht.sfs.uni-tuebingen.de/nexus/content/repositories/releases</url>
         </repository>
         <repository>
             <id>sfs-clarind-nexus-snapshots</id>
             <name>Internal Snapshots</name>
-            <url>http://nexus.weblicht.sfs.uni-tuebingen.de:5081/nexus/content/repositories/snapshots</url>
+            <url>http://t.weblicht.sfs.uni-tuebingen.de/nexus/content/repositories/snapshots</url>
         </repository>
         <repository>
             <id>clarin</id>
@@ -70,12 +70,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>oaipmh-cmdi-bindings</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
             <version>2.23.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-jaxb</artifactId>
+            <version>2.23</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -1,20 +1,13 @@
 package eu.clarin.weblicht.connectors.oai;
 
-import eu.clarin.weblicht.bindings.cmd.cp.WebServiceType;
-import eu.clarin.weblicht.bindings.cmd.cp.Metadata;
-import eu.clarin.weblicht.bindings.cmd.cp.MetadataScheme;
-import eu.clarin.weblicht.bindings.cmd.cp.SimpleMetadataScheme;
-import eu.clarin.weblicht.bindings.cmd.cp.SimpleWebServiceType;
+import eu.clarin.weblicht.bindings.cmd.cp.*;
 import eu.clarin.weblicht.bindings.oai.OAIPMH;
 import eu.clarin.weblicht.bindings.oai.Record;
 import eu.clarin.weblicht.bindings.oai.ResumptionToken;
 import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import eu.clarin.weblicht.connectors.cmditransform.CMDIReaderInterceptor;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +15,11 @@ import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -73,6 +71,7 @@ public class OAIConnector extends AbstractConnector {
                 if (records == null) {
                     records = new ArrayList<Record>();
                     oaiResource = client.target(oaiResource.getUriBuilder().replaceQuery(null).build()).queryParam(VERB, LIST_RECORDS);
+                    oaiResource.register(CMDIReaderInterceptor.class);
                 }
                 records.addAll(oaipmh.getListRecords().getRecords());
                 if (resumptionToken.getValue() != null && !resumptionToken.getValue().isEmpty()) {
@@ -101,11 +100,12 @@ public class OAIConnector extends AbstractConnector {
     }
 
     public OAIPMH retrieveOAIPMH(WebTarget oaiResource) throws ConnectorException {
-            return oaiResource.request(MediaType.APPLICATION_XML).get(OAIPMH.class);
+        String result = oaiResource.request(MediaType.APPLICATION_XML).get(String.class);
+        return oaiResource.request(MediaType.APPLICATION_XML).get(OAIPMH.class);
     }
 
     public InputStream retrieveInputStream(WebTarget oaiResource) {
-            return oaiResource.request(MediaType.APPLICATION_XML).get(InputStream.class);
+        return oaiResource.request(MediaType.APPLICATION_XML).get(InputStream.class);
     }
 
     public WebTarget buildWebResource(Metadata metadata) throws ConnectorException {
@@ -123,6 +123,7 @@ public class OAIConnector extends AbstractConnector {
         if (webServiceSet != null && !webServiceSet.isEmpty()) {
             oaiResource = oaiResource.queryParam(SET, webServiceSet);
         }
+        oaiResource.register(CMDIReaderInterceptor.class);
         return oaiResource;
     }
 
