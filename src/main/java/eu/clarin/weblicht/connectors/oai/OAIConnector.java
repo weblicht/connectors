@@ -8,6 +8,8 @@ import eu.clarin.weblicht.connectors.AbstractConnector;
 import eu.clarin.weblicht.connectors.ConnectorException;
 import eu.clarin.weblicht.connectors.cmditransform.CMDIReaderInterceptor;
 
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -100,12 +102,24 @@ public class OAIConnector extends AbstractConnector {
     }
 
     public OAIPMH retrieveOAIPMH(WebTarget oaiResource) throws ConnectorException {
-        String result = oaiResource.request(MediaType.APPLICATION_XML).get(String.class);
-        return oaiResource.request(MediaType.APPLICATION_XML).get(OAIPMH.class);
+        try {
+            String result = oaiResource.request(MediaType.APPLICATION_XML).get(String.class);
+            return oaiResource.request(MediaType.APPLICATION_XML).get(OAIPMH.class);
+        } catch (ProcessingException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        } catch (WebApplicationException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        }
     }
 
-    public InputStream retrieveInputStream(WebTarget oaiResource) {
-        return oaiResource.request(MediaType.APPLICATION_XML).get(InputStream.class);
+    public InputStream retrieveInputStream(WebTarget oaiResource) throws ConnectorException {
+        try {
+            return oaiResource.request(MediaType.APPLICATION_XML).get(InputStream.class);
+        } catch (ProcessingException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        } catch (WebApplicationException ex) {
+            throw new ConnectorException("unable to retrieve services", ex);
+        }
     }
 
     public WebTarget buildWebResource(Metadata metadata) throws ConnectorException {
@@ -116,15 +130,16 @@ public class OAIConnector extends AbstractConnector {
         throw new ConnectorException("bad oai access point uri: " + uri);
     }
 
-    public WebTarget buildWebResource(URI uri, String webServiceSet) {
-        UriBuilder uriBuilder = UriBuilder.fromUri(uri);
-        uriBuilder = uriBuilder.replaceQuery(null);
-        WebTarget oaiResource = client.target(uriBuilder.build()).queryParam(VERB, LIST_RECORDS).queryParam(METADATA_PREFIX, CMDI);
-        if (webServiceSet != null && !webServiceSet.isEmpty()) {
-            oaiResource = oaiResource.queryParam(SET, webServiceSet);
-        }
-        oaiResource.register(CMDIReaderInterceptor.class);
-        return oaiResource;
+    public WebTarget buildWebResource(URI uri, String webServiceSet) throws ConnectorException {
+            UriBuilder uriBuilder = UriBuilder.fromUri(uri);
+            uriBuilder = uriBuilder.replaceQuery(null);
+            WebTarget oaiResource = client.target(uriBuilder.build()).queryParam(VERB, LIST_RECORDS).queryParam(METADATA_PREFIX, CMDI);
+            if (webServiceSet != null && !webServiceSet.isEmpty()) {
+                oaiResource = oaiResource.queryParam(SET, webServiceSet);
+            }
+            oaiResource.register(CMDIReaderInterceptor.class);
+            return oaiResource;
+
     }
 
     public static boolean hasCMDI(Metadata metadata) {
