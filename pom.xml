@@ -26,9 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
     <url>http://www.clarin.eu/</url>
 
     <scm>
-        <url>https://arc.sfs.uni-tuebingen.de/summary/clarind!libraries!connectors.git</url>
-        <connection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</connection>
-        <developerConnection>scm:git:https://arc.sfs.uni-tuebingen.de/r/clarind/libraries/connectors.git</developerConnection>
+        <url>https://weblicht.sfs.uni-tuebingen.de/gitlab/clarind/libraries/connectors</url>
+        <connection>scm:git:https://weblicht.sfs.uni-tuebingen.de/gitlab/clarind/libraries/connectors.git</connection>
+        <developerConnection>scm:git:https://weblicht.sfs.uni-tuebingen.de/gitlab/clarind/libraries/connectors.git</developerConnection>
       <tag>HEAD</tag>
     </scm>
 
