@@ -34,12 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
 
     <distributionManagement>
        <repository>
-            <id>sfs-clarind-nexus</id>
+            <id>nexus</id>
             <name>Internal Releases</name>
             <url>http://t.weblicht.sfs.uni-tuebingen.de/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>sfs-clarind-nexus-snapshot</id>
+            <id>nexus</id>
             <name>Snapshot Releases</name>
             <url>http://t.weblicht.sfs.uni-tuebingen.de/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
