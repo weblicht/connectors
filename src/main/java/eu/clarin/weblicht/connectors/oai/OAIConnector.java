@@ -1,6 +1,5 @@
 package eu.clarin.weblicht.connectors.oai;
 
-import eu.clarin.weblicht.bindings.cmd.cp.*;
 import eu.clarin.weblicht.bindings.oai.OAIPMH;
 import eu.clarin.weblicht.bindings.oai.Record;
 import eu.clarin.weblicht.bindings.oai.ResumptionToken;
@@ -52,11 +51,6 @@ public class OAIConnector extends AbstractConnector {
 
     public List<Record> retrieveRecords(URI uri, String webServiceSet) throws ConnectorException {
         WebTarget oaiResource = buildWebResource(uri, webServiceSet);
-        return retrieveRecords(oaiResource);
-    }
-
-    public List<Record> retrieveRecords(Metadata metadata) throws ConnectorException {
-        WebTarget oaiResource = buildWebResource(metadata);
         return retrieveRecords(oaiResource);
     }
 
@@ -122,14 +116,6 @@ public class OAIConnector extends AbstractConnector {
         }
     }
 
-    public WebTarget buildWebResource(Metadata metadata) throws ConnectorException {
-        URI uri = metadata.getOaiAccessPoint();
-        if (uri != null) {
-            return buildWebResource(uri, metadata.getWebServicesSet());
-        }
-        throw new ConnectorException("bad oai access point uri: " + uri);
-    }
-
     public WebTarget buildWebResource(URI uri, String webServiceSet) throws ConnectorException {
             UriBuilder uriBuilder = UriBuilder.fromUri(uri);
             uriBuilder = uriBuilder.replaceQuery(null);
@@ -140,27 +126,5 @@ public class OAIConnector extends AbstractConnector {
             oaiResource.register(CMDIReaderInterceptor.class);
             return oaiResource;
 
-    }
-
-    public static boolean hasCMDI(Metadata metadata) {
-        for (MetadataScheme scheme : metadata.getMetadataScheme()) {
-            if (scheme.getValue() == SimpleMetadataScheme.CMDI) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean hasWebLichtWebServices(Metadata metadata) {
-        for (WebServiceType type : metadata.getWebServiceType()) {
-            if (type.getValue() == SimpleWebServiceType.WEB_LICHT) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean hasWebServicesSet(Metadata metadata) {
-        return (metadata.getWebServicesSet() != null && !metadata.getWebServicesSet().isEmpty());
     }
 }

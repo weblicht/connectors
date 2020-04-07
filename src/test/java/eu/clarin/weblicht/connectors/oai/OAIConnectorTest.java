@@ -1,49 +1,34 @@
 package eu.clarin.weblicht.connectors.oai;
 
+import eu.clarin.weblicht.bindings.cmd.ws.Components;
 import eu.clarin.weblicht.bindings.oai.Record;
+import org.junit.Test;
+
 import java.net.URI;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
 
 /**
- *
  * @author akislev
  */
 public class OAIConnectorTest {
-
     private static final int TIMEOUT = 3000;
-    private static final URI REPOSITORY_URI = URI.create("http://weblicht.sfs.uni-tuebingen.de/oaiprovider/");
-    private static final URI REPOSITORY_URI_BERLIN = URI.create("http://clarin.bbaw.de:8088/oaiprovider");
-    private OAIConnector connector;
+    public static final URI EKUT_REPOSITORY_URI = URI.create("https://talar.sfb833.uni-tuebingen.de:8443/erdora/rest/oai");
 
-    public OAIConnectorTest() {
-    }
-
-    @Before
-    public void setUp() {
-        connector = new OAIConnector(TIMEOUT);
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of retrieveRecords method, of class OAIConnector.
-     */
     @Test
     public void testRetrieveRecords_URI() throws Exception {
-        System.out.println("retrieveRecords");
-        List<Record> result = connector.retrieveRecords(REPOSITORY_URI);
+        OAIConnector connector = new OAIConnector(TIMEOUT);
+        List<Record> result = connector.retrieveRecords(EKUT_REPOSITORY_URI);
+        assertFalse(result.isEmpty());
+        for (Record r : result) {
+            Components comp = r.getCMD().getComponents();
+            try {
+                String name = comp.getWebLichtWebService().getService().getName().getValue();
+                System.out.println("" + name);
+            } catch (NullPointerException xc) {
+                System.out.println("not a webservice: "  + comp);
+            }
+        }
     }
-
-    @Test
-    public void testRetrieveRecords_URI_Berlin() throws Exception {
-        System.out.println("retrieveRecords");
-        List<Record> result = connector.retrieveRecords(REPOSITORY_URI_BERLIN);
-    }
-
 }

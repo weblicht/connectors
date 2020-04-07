@@ -1,33 +1,25 @@
 package eu.clarin.weblicht.connectors.cmditransform;
 
-import eu.clarin.weblicht.bindings.CMDITemplateFactory;
+import eu.clarin.weblicht.bindings.CenterProfileHelper;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * Created by wqiu on 06/12/16.
  */
-public class CMDIReaderInterceptor implements ReaderInterceptor{
+public class CMDIReaderInterceptor implements ReaderInterceptor {
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
-        final InputStream originalInputStream = context.getInputStream();
+        final InputStream cmdi11 = context.getInputStream();
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Result outputTarget = new StreamResult(outputStream);
-            Templates templates = CMDITemplateFactory.getTemplates();
-            Transformer transformer = templates.newTransformer();
-            transformer.transform(new StreamSource(originalInputStream), outputTarget);
-            InputStream is = new ByteArrayInputStream(outputStream.toByteArray());
-            context.setInputStream(is);
+            InputStream cmdi12 = CenterProfileHelper.updateToCmdi12AndCenterProfile2(cmdi11);
+            context.setInputStream(cmdi12);
             return context.proceed();
         } catch (TransformerConfigurationException e) {
             throw new WebApplicationException(e);
@@ -35,4 +27,25 @@ public class CMDIReaderInterceptor implements ReaderInterceptor{
             throw new WebApplicationException(e);
         }
     }
+
+//    InputStream debugXml(InputStream input) {
+//        byte[] data = new byte[]{};
+//        try {
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            input.transferTo(outputStream);
+//            data = outputStream.toByteArray();
+//
+//            System.out.println(new String(data));
+//
+//            JAXBContext ex = JAXBContext.newInstance(CenterProfileCMD.class);
+//            Unmarshaller unmarshaller = ex.createUnmarshaller();
+//            unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+//            unmarshaller.unmarshal(new ByteArrayInputStream(data));
+//        } catch (IOException e) {
+//            throw new WebApplicationException(e);
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
+//        return new ByteArrayInputStream(data);
+//    }
 }
