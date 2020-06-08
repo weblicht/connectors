@@ -14,7 +14,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class OAIConnectorTest {
     private static final int TIMEOUT = 3000;
-    public static final URI EKUT_REPOSITORY_URI = URI.create("https://talar.sfb833.uni-tuebingen.de:8443/erdora/rest/oai");
+    public static final URI EKUT_REPOSITORY_URI = URI.create("https://talar.sfb833.uni-tuebingen.de/erdora/rest/oai");
 
     @Test
     public void testRetrieveRecords_URI() throws Exception {
